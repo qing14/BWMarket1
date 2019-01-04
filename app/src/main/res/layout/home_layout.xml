@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:orientation="horizontal">
+
+        <com.stx.xhb.xbanner.XBanner
+            android:id="@+id/xbanner"
+            android:layout_width="@dimen/dp_300"
+            android:layout_height="@dimen/dp_200"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_gravity="center"
+            app:isClipChildrenMode="true"
+            >
+        </com.stx.xhb.xbanner.XBanner>
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_2"
+        android:background="@color/colorAccent"
+        />
+
+
+
+</LinearLayout>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:background="@mipmap/login_register_background">
+
+    <EditText
+        android:id="@+id/login_phone"
+        android:layout_marginTop="@dimen/dp_200"
+        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginRight="@dimen/dp_20"
+        android:layout_width="@dimen/dp_600"
+        android:layout_height="50dp"
+        android:textColorHint="#fff"
+        android:hint="手机号"
+        android:drawableLeft="@mipmap/login_icon_phone"
+        android:drawablePadding="@dimen/dp_20"
+        android:textColor="#fff"
+        android:background="@null"
+        />
+    <View
+        android:layout_alignLeft="@+id/login_phone"
+        android:layout_alignRight="@+id/login_phone"
+        android:layout_below="@+id/login_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="#fff"
+        />
+
+
+
+    <EditText
+        android:id="@+id/login_password"
+        android:layout_width="@dimen/dp_200"
+        android:layout_marginTop="@dimen/dp_250"
+        android:layout_alignLeft="@+id/login_phone"
+        android:layout_alignRight="@+id/login_phone"
+        android:layout_height="50dp"
+        android:textColorHint="#fff"
+        android:hint="登录密码"
+        android:drawableLeft="@mipmap/login_icon_lock"
+        android:drawablePadding="@dimen/dp_20"
+        android:textColor="#fff"
+        android:password="true"
+        android:background="@null"
+        />
+    <ImageView
+        android:id="@+id/login_seepassword"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:src="@mipmap/login_icon_eye"
+        android:layout_alignRight="@+id/login_password"
+        android:layout_alignBottom="@+id/login_password"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+
+        />
+    <View
+        android:layout_alignLeft="@+id/login_password"
+        android:layout_alignRight="@+id/login_password"
+        android:layout_below="@+id/login_password"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="#fff"
+        />
+
+
+    <CheckBox
+        android:id="@+id/jzpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/login_password"
+        android:layout_marginTop="@dimen/dp_300"
+        android:textColor="#fff"
+        android:buttonTint="#fff"
+        android:text="记住密码"/>
+    <TextView
+        android:id="@+id/go_zc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/login_password"
+        android:layout_marginTop="@dimen/dp_305"
+        android:textColor="#fff"
+        android:text="没有用户，请注册"
+        />
+
+<Button
+    android:id="@+id/login"
+    android:layout_width="@dimen/dp_280"
+    android:layout_height="@dimen/dp_40"
+    android:background="@drawable/checkbox"
+    android:text="登录"
+    android:textColor="#f00"
+    android:layout_below="@+id/login_password"
+    android:layout_marginTop="@dimen/dp_80"
+    android:layout_centerHorizontal="true"
+    android:textSize="@dimen/dp_20"
+
+    />
+
+</RelativeLayout>
