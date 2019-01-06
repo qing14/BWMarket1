@@ -12,4 +12,6 @@ public interface Ipresenter {
     void getCircle(String urlData,int page,int count, Class clazz, int i );
     //首页轮播
     void getXBanner(String urlData,Class clazz);
+    //get
+    void get(String urlData,Class clazz);
 }

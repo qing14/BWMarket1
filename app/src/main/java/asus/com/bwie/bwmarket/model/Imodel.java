@@ -13,4 +13,6 @@ public interface Imodel {
     void getCircleData(String urlData,int page,int count,Class clazz,MyCallBack myCallBack);
     //首页轮播
     void getXBannerData(String urlData,Class clazz,MyCallBack myCallBack);
+    //get
+    void get(String urlData,Class clazz,MyCallBack myCallBack);
 }

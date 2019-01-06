@@ -30,22 +30,46 @@ public class Imodelmpl implements Imodel {
 
         });
     }
+
     //圈子列表
     @Override
-    public void getCircleData(String urlData ,int page,int count ,final Class clazz, final MyCallBack myCallBack) {
-        OkHttpUtils.getOkHttpUtils().getCircle(urlData,page,count).result(new OkHttpUtils.HttpListener() {
+    public void getCircleData(String urlData, int page, int count, final Class clazz, final MyCallBack myCallBack) {
+        OkHttpUtils.getOkHttpUtils().getCircle(urlData, page, count, new OkHttpUtils.HttpListener() {
             @Override
             public void onSuccess(String data) {
                 try {
                     Object o = new Gson().fromJson(data, clazz);
-                    if (myCallBack!=null){
+                    if (myCallBack != null) {
                         myCallBack.onSuccess(o);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    if (myCallBack!=null){
+                    if (myCallBack != null) {
                         myCallBack.onFail(e);
                     }
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+            }
+        });
+    }
+
+    /**
+     * 首页轮播
+     * @param urlData
+     * @param clazz
+     * @param myCallBack
+     */
+    @Override
+    public void getXBannerData(String urlData, final Class clazz, final MyCallBack myCallBack) {
+        OkHttpUtils.getOkHttpUtils().getXBanners(urlData, new OkHttpUtils.HttpListener() {
+            @Override
+            public void onSuccess(String data) {
+                Object o = new Gson().fromJson(data, clazz);
+                if (myCallBack != null) {
+                    myCallBack.onSuccess(o);
                 }
             }
 
@@ -56,22 +80,20 @@ public class Imodelmpl implements Imodel {
         });
     }
 
+    /**
+     * get
+     * @param urlData
+     * @param clazz
+     * @param myCallBack
+     */
     @Override
-    public void getXBannerData(String urlData, final Class clazz, final MyCallBack myCallBack) {
-        OkHttpUtils.getOkHttpUtils().getXBanners(urlData,new OkHttpUtils.HttpListener() {
-
+    public void get(String urlData, final Class clazz, final MyCallBack myCallBack) {
+        OkHttpUtils.getOkHttpUtils().get(urlData, new OkHttpUtils.HttpListener() {
             @Override
             public void onSuccess(String data) {
-                try {
-                    Object o = new Gson().fromJson(data, clazz);
-                    if (myCallBack!=null){
-                        myCallBack.onSuccess(o);
-                    }
-                }catch (Exception e){
-                    e.printStackTrace();
-                    if (myCallBack!=null){
-                        myCallBack.onFail(e);
-                    }
+                Object o = new Gson().fromJson(data, clazz);
+                if (myCallBack != null) {
+                    myCallBack.onSuccess(o);
                 }
             }
 

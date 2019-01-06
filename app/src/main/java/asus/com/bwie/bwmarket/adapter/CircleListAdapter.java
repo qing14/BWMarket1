@@ -25,7 +25,7 @@ import java.util.List;
 import asus.com.bwie.bwmarket.R;
 import asus.com.bwie.bwmarket.bean.CircleListBean;
 
-public class CircleListAdapter extends XRecyclerView.Adapter<CircleListAdapter.ViewHolder> {
+public class CircleListAdapter extends RecyclerView.Adapter<CircleListAdapter.ViewHolder> {
 
     private List<CircleListBean.ResultBean> list;
     private Context mContext;
@@ -81,7 +81,6 @@ public class CircleListAdapter extends XRecyclerView.Adapter<CircleListAdapter.V
         private final TextView circle_user_time;
         private final TextView circle_user_text;
         private final SimpleDraweeView circle_user_picture;
-    //    private final TextView circle_dianzan_num;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -90,7 +89,6 @@ public class CircleListAdapter extends XRecyclerView.Adapter<CircleListAdapter.V
             circle_user_time = itemView.findViewById(R.id.circle_user_time);
             circle_user_text = itemView.findViewById(R.id.circle_user_text);
           circle_user_picture = itemView.findViewById(R.id.circle_user_picture);
-    //       circle_dianzan_num = itemView.findViewById(R.id.circle_dianzan_num);
 
 
         }

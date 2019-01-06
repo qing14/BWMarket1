@@ -30,7 +30,7 @@ public class CircleFragment extends Fragment implements Iview {
     private CircleListAdapter circleListAdapter;
     private TextView circle_dianzan_num;
     private ImageView circle_dianzan_img;
-    int count=9;
+    int count=5;
 
     @Nullable
     @Override
@@ -40,6 +40,9 @@ public class CircleFragment extends Fragment implements Iview {
         ipresenter = new IpresenterImpl(this);
         circle_dianzan_img = view.findViewById(R.id.circle_dianzan_img);
         circle_dianzan_num = view.findViewById(R.id.circle_dianzan_num);
+        circleListAdapter = new CircleListAdapter(getActivity());
+        circle_recycle.setAdapter(circleListAdapter);
+
         circle_recycle.setLoadingMoreEnabled(true);
         circle_recycle.setPullRefreshEnabled(true);
         circle_recycle.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -59,10 +62,9 @@ public class CircleFragment extends Fragment implements Iview {
         });
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         circle_recycle.setLayoutManager(linearLayoutManager);
-        circleListAdapter = new CircleListAdapter(getActivity());
-        circle_recycle.setAdapter(circleListAdapter);
         mPage=1;
         requestData();
+
         return view;
     }
 
@@ -85,6 +87,6 @@ public class CircleFragment extends Fragment implements Iview {
 
     @Override
     public void onFailData(Exception e) {
-
+        ipresenter.detach();
     }
 }

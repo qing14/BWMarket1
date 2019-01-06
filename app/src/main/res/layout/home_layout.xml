@@ -1,34 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipChildren="false"
-        android:orientation="horizontal">
+        android:layout_height="800dp"
+        android:orientation="vertical">
 
-        <com.stx.xhb.xbanner.XBanner
-            android:id="@+id/xbanner"
-            android:layout_width="@dimen/dp_300"
-            android:layout_height="@dimen/dp_200"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_gravity="center"
-            app:isClipChildrenMode="true"
-            >
-        </com.stx.xhb.xbanner.XBanner>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:clipChildren="false"
+            android:orientation="horizontal">
 
-    </RelativeLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_2"
-        android:background="@color/colorAccent"
-        />
+            <com.stx.xhb.xbanner.XBanner
+                android:id="@+id/xbanner"
+                android:layout_width="@dimen/dp_350"
+                android:layout_height="@dimen/dp_200"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/dp_10"
+                app:isClipChildrenMode="true"></com.stx.xhb.xbanner.XBanner>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bg_rxxp_syf"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="热销新品"
+                android:textColor="#FF7F40"
+                android:textSize="@dimen/dp_17"
+                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/rxmore"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center"
+                android:src="@mipmap/common_btn_more_yellow"
+                android:padding="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rxxprecycleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="#fff"></android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bg_mlss_syf"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="魔力时尚"
+                android:textColor="#9379DB"
+                android:textSize="@dimen/dp_17"
+                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/mlmore"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center"
+                android:src="@mipmap/home_btn_more_purple"
+                android:padding="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mlssrecycleView"
+            android:layout_width="@dimen/dp_350"
+            android:layout_gravity="center_horizontal"
+            android:background="#fff"
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/bg_pzsh_syf"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="品质生活"
+                android:textColor="#FF6EC7"
+                android:textSize="@dimen/dp_17"
+                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/pzmore"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center"
+                android:src="@mipmap/home_btn_moer_pink"
+                android:padding="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/pzshRecycleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"></android.support.v7.widget.RecyclerView>
 
 
-
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

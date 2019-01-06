@@ -65,7 +65,6 @@ public class OkHttpUtils {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(BASE_URL)
                 .client(mClient)
-                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         baseApis = retrofit.create(BaseApis.class);
@@ -128,28 +127,42 @@ public class OkHttpUtils {
      *圈子列表
      * @return
      */
-    public OkHttpUtils getCircle(String urlData,int page,int count){
+    public OkHttpUtils getCircle(String urlData,int page,int count,HttpListener listener){
         baseApis.getcircle(urlData,page,count)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+                .subscribe(getObserver(listener));
         return okHttpUtils;
     }
 
     /**
      * 首页的XBanner轮播
      * @param urlData
-     * @param listener
      * @return
      */
 
-    public OkHttpUtils getXBanners(String urlData, HttpListener listener){
+    public OkHttpUtils getXBanners(String urlData,HttpListener listener){
         baseApis.getXBanner(urlData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+                .subscribe(getObserver(listener));
         return okHttpUtils;
     }
+
+    /**
+     * get
+     * @param urlData
+     * @param listener
+     * @return
+     */
+    public OkHttpUtils get(String urlData,HttpListener listener){
+        baseApis.get(urlData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserver(listener));
+        return okHttpUtils;
+    }
+
 
     /**
      * post清单
@@ -162,7 +175,7 @@ public class OkHttpUtils {
         baseApis.postFormBody(url,map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+                .subscribe(getObserver(listener));
         return okHttpUtils;
     }
     /**
@@ -176,7 +189,7 @@ public class OkHttpUtils {
         baseApis.post(url,map)
                 .observeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+                .subscribe(getObserver(listener));
         return okHttpUtils;
     }
 
@@ -185,41 +198,45 @@ public class OkHttpUtils {
     /**
      * 观察者
      */
-    private Observer observer=new Observer<ResponseBody>() {
-        @Override
-        public void onCompleted() {
+    private Observer getObserver(final HttpListener listener){
+        Observer observer=new Observer<ResponseBody>() {
+            @Override
+            public void onCompleted() {
 
-        }
-        @Override
-        public void onError(Throwable e) {
-            if (listener !=null){
-                listener.onFail(e.getMessage());
             }
-        }
-
-        @Override
-        public void onNext(ResponseBody responseBody) {
-            try {
-                String data = responseBody.string();
-                if (listener!=null){
-                    listener.onSuccess(data);
-                }
-            }catch (IOException e){
-                e.printStackTrace();
-                if (listener!=null){
+            @Override
+            public void onError(Throwable e) {
+                if (listener !=null){
                     listener.onFail(e.getMessage());
                 }
-        }
+            }
 
+            @Override
+            public void onNext(ResponseBody responseBody) {
+                try {
+                    String data = responseBody.string();
+                    if (listener!=null){
+                        listener.onSuccess(data);
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                    if (listener!=null){
+                        listener.onFail(e.getMessage());
+                    }
+                }
 
-        }
-    };
+            }
+
+        };
+        return observer;
+    }
 
     private HttpListener listener;
 
     public void result(HttpListener listener){
         this.listener=listener;
     }
+
 
     public interface HttpListener{
         void onSuccess(String data);

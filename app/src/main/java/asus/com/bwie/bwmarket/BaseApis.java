@@ -19,6 +19,9 @@ import rx.Observable;
 
 public interface BaseApis<T> {
     @GET
+    Observable<ResponseBody> get(@Url String url);
+
+    @GET
     Observable<ResponseBody> getXBanner(@Url String url);
 
     @GET

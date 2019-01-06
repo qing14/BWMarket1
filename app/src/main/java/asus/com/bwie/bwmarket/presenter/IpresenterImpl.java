@@ -47,10 +47,25 @@ public class IpresenterImpl implements Ipresenter {
             }
         });
     }
-
+    //XBanner
     @Override
     public void getXBanner(String urlData,Class clazz) {
         imodelmpl.getXBannerData(urlData,clazz, new MyCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                iview.onSuccessData(data);
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                iview.onFailData(e);
+            }
+        });
+    }
+    //get
+    @Override
+    public void get(String urlData,Class clazz) {
+        imodelmpl.get(urlData,clazz, new MyCallBack() {
             @Override
             public void onSuccess(Object data) {
                 iview.onSuccessData(data);
