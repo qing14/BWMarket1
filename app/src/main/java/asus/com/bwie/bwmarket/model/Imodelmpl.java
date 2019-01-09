@@ -9,6 +9,7 @@ import java.util.Map;
 
 import asus.com.bwie.bwmarket.callback.MyCallBack;
 import asus.com.bwie.bwmarket.util.OkHttpUtils;
+import okhttp3.OkHttpClient;
 
 
 public class Imodelmpl implements Imodel {
@@ -94,6 +95,31 @@ public class Imodelmpl implements Imodel {
                 Object o = new Gson().fromJson(data, clazz);
                 if (myCallBack != null) {
                     myCallBack.onSuccess(o);
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+
+            }
+        });
+    }
+
+    @Override
+    public void postData(String urlData, final Map<String, String> map, final Class clazz, final MyCallBack myCallBack) {
+        OkHttpUtils.getOkHttpUtils().post(urlData, map, new OkHttpUtils.HttpListener() {
+            @Override
+            public void onSuccess(String data) {
+                try {
+                    Object o = new Gson().fromJson(data, clazz);
+                    if(myCallBack != null){
+                        myCallBack.onSuccess(o);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    if(myCallBack != null){
+                        myCallBack.onFail(e);
+                    }
                 }
             }
 

@@ -1,4 +1,4 @@
-package asus.com.bwie.bwmarket;
+package asus.com.bwie.bwmarket.activity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import asus.com.bwie.bwmarket.R;
 import asus.com.bwie.bwmarket.adapter.MyPagerAdapter;
 import asus.com.bwie.bwmarket.fragment.BillFragment;
 import asus.com.bwie.bwmarket.fragment.CircleFragment;

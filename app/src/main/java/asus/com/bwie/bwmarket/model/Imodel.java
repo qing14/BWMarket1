@@ -15,4 +15,6 @@ public interface Imodel {
     void getXBannerData(String urlData,Class clazz,MyCallBack myCallBack);
     //get
     void get(String urlData,Class clazz,MyCallBack myCallBack);
+    //post
+    void postData(String urlData, Map<String,String> map,Class clazz,MyCallBack myCallBack);
 }

@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
 
 public class OkHttpUtils {
 
-    private final String BASE_URL = "http://172.17.8.100/small/";
+    private final String BASE_URL = "http://mobile.bwstudent.com/small/";
     public static OkHttpUtils okHttpUtils;
     public OkHttpClient mClient;
     public Handler handler=new Handler(Looper.getMainLooper());
@@ -181,7 +181,7 @@ public class OkHttpUtils {
     /**
      * 普通post请求
      */
-    public OkHttpUtils post(String url,Map<String,String> map){
+    public OkHttpUtils post(String url,Map<String,String> map,HttpListener listener){
         if (map==null){
             map=new HashMap<>();
 

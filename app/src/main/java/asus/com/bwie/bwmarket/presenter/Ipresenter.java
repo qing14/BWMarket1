@@ -14,4 +14,6 @@ public interface Ipresenter {
     void getXBanner(String urlData,Class clazz);
     //get
     void get(String urlData,Class clazz);
+    //post
+    void post(String urlData,Map<String,String> map,Class clazz);
 }

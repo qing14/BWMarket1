@@ -5,7 +5,8 @@
     android:background="@drawable/sy_bk"
     android:orientation="vertical"
     android:layout_margin="5dp"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:id="@+id/rxxpLinearLayout">
     <ImageView
         android:id="@+id/sy_shopimg"
         android:layout_width="@dimen/dp_100"

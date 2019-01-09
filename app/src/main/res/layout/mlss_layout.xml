@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_110"
     android:orientation="horizontal"
-    android:background="@drawable/sy_bk">
+    android:background="@drawable/sy_bk"
+    android:id="@+id/mlssLinearLayout">
     <ImageView
         android:id="@+id/sy_mlss_shopimg"
         android:layout_width="@dimen/dp_100"

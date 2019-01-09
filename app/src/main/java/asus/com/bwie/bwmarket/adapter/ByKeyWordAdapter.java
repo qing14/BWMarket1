@@ -15,25 +15,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 import asus.com.bwie.bwmarket.R;
-import asus.com.bwie.bwmarket.bean.SYShopBean;
+import asus.com.bwie.bwmarket.bean.ByKeywordBean;
+import asus.com.bwie.bwmarket.bean.ClickMoreBean;
 
-public class SYRXXPAdapter extends RecyclerView.Adapter<SYRXXPAdapter.ViewHolder> {
+public class ByKeyWordAdapter extends RecyclerView.Adapter<ByKeyWordAdapter.ViewHolder> {
 
 
-    private List<SYShopBean.ResultBean.RxxpBean.CommodityListBean> commodityListBeans=new ArrayList<>();
+    private List<ByKeywordBean.ResultBean> resultBeans=new ArrayList<>();
     private Context mContext;
 
-    public SYRXXPAdapter(Context Context) {
+    public ByKeyWordAdapter(Context Context) {
 
         this.mContext = Context;
     }
 
-    public void setCommodityListBeans(List<SYShopBean.ResultBean.RxxpBean.CommodityListBean> commodityListBean) {
-        this.commodityListBeans = commodityListBean;
+
+    public void setResultBeans(List<ByKeywordBean.ResultBean> resultBeans) {
+        this.resultBeans = resultBeans;
         notifyDataSetChanged();
     }
+
     public int getPid(int position){
-        return commodityListBeans.get(position).getCommodityId();
+        return resultBeans.get(position).getCommodityId();
     }
     @NonNull
     @Override
@@ -47,9 +50,9 @@ public class SYRXXPAdapter extends RecyclerView.Adapter<SYRXXPAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
 
-        Glide.with(mContext).load(commodityListBeans.get(position).getMasterPic()).into(holder.sy_shopimg);
-        holder.sy_shopprice.setText("￥："+commodityListBeans.get(position).getPrice()+".00");
-        holder.sy_shopname.setText(commodityListBeans.get(position).getCommodityName()+"");
+        Glide.with(mContext).load(resultBeans.get(position).getMasterPic()).into(holder.sy_shopimg);
+        holder.sy_shopprice.setText("￥："+resultBeans.get(position).getPrice()+".00");
+        holder.sy_shopname.setText(resultBeans.get(position).getCommodityName()+"");
         holder.rxxpLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +67,7 @@ public class SYRXXPAdapter extends RecyclerView.Adapter<SYRXXPAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        return commodityListBeans.size();
+        return resultBeans.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -82,14 +85,14 @@ public class SYRXXPAdapter extends RecyclerView.Adapter<SYRXXPAdapter.ViewHolder
             rxxpLinearLayout = itemView.findViewById(R.id.rxxpLinearLayout);
         }
     }
-    public RXXPClickListenter listenter;
+    public ByKeyWordClickListenter listenter;
 
-    public  void setOnRXXPClickListenter(RXXPClickListenter clickListenter){
+    public  void setOnByKeyWordClickListenter(ByKeyWordClickListenter clickListenter){
         listenter=clickListenter;
     }
 
 
-    public interface RXXPClickListenter{
+    public interface ByKeyWordClickListenter{
         void onClick(int position);
     }
 }

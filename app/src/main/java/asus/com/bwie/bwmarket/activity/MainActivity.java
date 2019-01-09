@@ -1,4 +1,4 @@
-package asus.com.bwie.bwmarket;
+package asus.com.bwie.bwmarket.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +17,8 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
+import asus.com.bwie.bwmarket.Apis;
+import asus.com.bwie.bwmarket.R;
 import asus.com.bwie.bwmarket.bean.LoginBean;
 import asus.com.bwie.bwmarket.presenter.IpresenterImpl;
 import asus.com.bwie.bwmarket.view.Iview;

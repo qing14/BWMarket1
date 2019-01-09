@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +26,10 @@ public class SYMLSSAdapter extends RecyclerView.Adapter<SYMLSSAdapter.ViewHolder
     public SYMLSSAdapter(Context Context) {
         this.mContext = Context;
     }
+    public int getPidxx(int position){
+        return commodityListBeanXXs.get(position).getCommodityId();
+    }
+
 
     public void setCommodityListBeanXX(List<SYShopBean.ResultBean.MlssBean.CommodityListBeanXX> commodityListBeanXX) {
         this.commodityListBeanXXs = commodityListBeanXX;
@@ -40,13 +45,20 @@ public class SYMLSSAdapter extends RecyclerView.Adapter<SYMLSSAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
 
 
         Glide.with(mContext).load(commodityListBeanXXs.get(position).getMasterPic()).into(holder.sy_mlss_shopimg);
         holder.sy_mlss_shopprice.setText("￥："+commodityListBeanXXs.get(position).getPrice()+".00");
         holder.sy_mlss_shopname.setText(commodityListBeanXXs.get(position).getCommodityName()+"");
-
+        holder.mlssLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listenter!=null){
+                    listenter.onClick(position);
+                }
+            }
+        });
 
 
     }
@@ -61,13 +73,24 @@ public class SYMLSSAdapter extends RecyclerView.Adapter<SYMLSSAdapter.ViewHolder
         private final ImageView sy_mlss_shopimg;
         private final TextView sy_mlss_shopname;
         private final TextView sy_mlss_shopprice;
+        private final LinearLayout mlssLinearLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
             sy_mlss_shopimg = itemView.findViewById(R.id.sy_mlss_shopimg);
             sy_mlss_shopname = itemView.findViewById(R.id.sy_mlss_shopname);
             sy_mlss_shopprice = itemView.findViewById(R.id.sy_mlss_shopprice);
-
+            mlssLinearLayout = itemView.findViewById(R.id.mlssLinearLayout);
         }
+    }
+    public MLSSClickListenter listenter;
+
+    public  void setOnMLSSClickListenter(MLSSClickListenter clickListenter){
+        listenter=clickListenter;
+    }
+
+
+    public interface MLSSClickListenter{
+        void onClick(int position);
     }
 }

@@ -1,9 +1,8 @@
-package asus.com.bwie.bwmarket;
+package asus.com.bwie.bwmarket.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.view.MotionEvent;
@@ -16,8 +15,9 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.Map;
 
+import asus.com.bwie.bwmarket.Apis;
+import asus.com.bwie.bwmarket.R;
 import asus.com.bwie.bwmarket.bean.RegisterBean;
-import asus.com.bwie.bwmarket.presenter.Ipresenter;
 import asus.com.bwie.bwmarket.presenter.IpresenterImpl;
 import asus.com.bwie.bwmarket.util.YZUtils;
 import asus.com.bwie.bwmarket.view.Iview;

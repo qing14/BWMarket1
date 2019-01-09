@@ -27,7 +27,6 @@ public interface BaseApis<T> {
     @GET
     Observable<ResponseBody> getcircle(@Url String url,@Query("page")int page,@Query("count") int count);
 
-
     @POST
     Observable<ResponseBody> post(@Url String url, @QueryMap Map<String,String> map);
 

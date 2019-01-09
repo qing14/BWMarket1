@@ -21,6 +21,7 @@ import asus.com.bwie.bwmarket.R;
 import asus.com.bwie.bwmarket.adapter.CircleListAdapter;
 import asus.com.bwie.bwmarket.bean.CircleListBean;
 import asus.com.bwie.bwmarket.presenter.IpresenterImpl;
+import asus.com.bwie.bwmarket.util.SpaceItemDecoration;
 import asus.com.bwie.bwmarket.view.Iview;
 
 public class CircleFragment extends Fragment implements Iview {
@@ -41,6 +42,7 @@ public class CircleFragment extends Fragment implements Iview {
         circle_dianzan_img = view.findViewById(R.id.circle_dianzan_img);
         circle_dianzan_num = view.findViewById(R.id.circle_dianzan_num);
         circleListAdapter = new CircleListAdapter(getActivity());
+        circle_recycle.addItemDecoration(new SpaceItemDecoration(10));
         circle_recycle.setAdapter(circleListAdapter);
 
         circle_recycle.setLoadingMoreEnabled(true);
@@ -50,14 +52,11 @@ public class CircleFragment extends Fragment implements Iview {
             public void onRefresh() {
                 mPage=1;
                 requestData();
-
-
             }
 
             @Override
             public void onLoadMore() {
                 requestData();
-
             }
         });
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
