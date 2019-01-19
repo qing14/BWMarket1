@@ -37,14 +37,6 @@ public class LoginBean {
     }
 
     public static class ResultBean {
-        /**
-         * headPic : http://172.17.8.100/images/small/default/user.jpg
-         * nickName : QH_BY43j
-         * phone : 13800138000
-         * sessionId : 1546062585545440
-         * sex : 1
-         * userId : 440
-         */
 
         private String headPic;
         private String nickName;

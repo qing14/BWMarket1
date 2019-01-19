@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.stx.xhb.xbanner.XBanner;
 
+import java.util.List;
+
 import asus.com.bwie.bwmarket.Apis;
 import asus.com.bwie.bwmarket.R;
 import asus.com.bwie.bwmarket.activity.ParticularsActivity;
@@ -117,6 +119,8 @@ public class HomeFragment extends Fragment implements Iview {
             public void onClick(View v) {
                 scrollView.setVisibility(View.VISIBLE);
                 morelinear.setVisibility(View.GONE);
+
+                editText.getText().clear();
             }
         });
         sy_sousuo.setOnClickListener(new View.OnClickListener() {
@@ -265,8 +269,16 @@ public class HomeFragment extends Fragment implements Iview {
             moreAdapter.setResultBeans(clickMoreBean.getResult());
         }else if (data instanceof ByKeywordBean){
             ByKeywordBean byKeywordBean= (ByKeywordBean) data;
-            byKeyWordAdapter.setResultBeans(byKeywordBean.getResult());
-            editText.getText().clear();
+            List<ByKeywordBean.ResultBean> result = byKeywordBean.getResult();
+
+            if(result.size()==0){
+                Toast.makeText(getActivity(),"没有您想要的内容",Toast.LENGTH_SHORT).show();
+
+            }else {
+                byKeyWordAdapter.setResultBeans(byKeywordBean.getResult());
+
+            }
+
         }else if (data instanceof HomeXBannerBean){
             HomeXBannerBean bannerBean = (HomeXBannerBean) data;
             //为XBanner绑定数据

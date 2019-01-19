@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.youth.banner.Banner;
 import com.youth.banner.loader.ImageLoaderInterface;
 
@@ -23,7 +25,11 @@ import java.util.Map;
 
 import asus.com.bwie.bwmarket.Apis;
 import asus.com.bwie.bwmarket.R;
+import asus.com.bwie.bwmarket.bean.AddShopCarBean;
+import asus.com.bwie.bwmarket.bean.Goods;
+import asus.com.bwie.bwmarket.bean.ShopCarBean;
 import asus.com.bwie.bwmarket.bean.ShopParticularsBean;
+import asus.com.bwie.bwmarket.bean.TestBean;
 import asus.com.bwie.bwmarket.presenter.IpresenterImpl;
 import asus.com.bwie.bwmarket.view.Iview;
 
@@ -40,6 +46,8 @@ public class ParticularsActivity extends AppCompatActivity implements Iview {
     private ImageView pzmore;
     private ImageView mlmore;
     private ImageView rxmore;
+    private Button add_shopCar;
+    private AddShopCarBean addShopCarBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +63,13 @@ public class ParticularsActivity extends AppCompatActivity implements Iview {
         rxmore = findViewById(R.id.rxmore);
         mlmore = findViewById(R.id.mlmore);
         pzmore = findViewById(R.id.pzmore);
+        add_shopCar = findViewById(R.id.add_shopCar);
 
 
         Intent intent = getIntent();
         pid = intent.getStringExtra("pid");
-        Toast.makeText(this, pid,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, pid, Toast.LENGTH_SHORT).show();
         ipresenter = new IpresenterImpl(this);
-
 
 
         banner.setImageLoader(new ImageLoaderInterface<ImageView>() {
@@ -69,40 +77,107 @@ public class ParticularsActivity extends AppCompatActivity implements Iview {
             public void displayImage(Context context, Object path, ImageView imageView) {
                 Glide.with(ParticularsActivity.this).load(path).into(imageView);
             }
-
             @Override
             public ImageView createImageView(Context context) {
-                ImageView imageView=new ImageView(context);
+                ImageView imageView = new ImageView(context);
                 imageView.setScaleType(ImageView.ScaleType.FIT_XY);
                 return imageView;
             }
         });
+        ipresenter.getXBanner(Apis.ShopXQPath + "?commodityId=" + pid, ShopParticularsBean.class);
 
-        ipresenter.getXBanner(Apis.ShopXQPath+"?commodityId="+pid,ShopParticularsBean.class);
 
+        add_shopCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chaShopCar();
+
+                Toast.makeText(ParticularsActivity.this, "" + pid, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
+    private void chaShopCar() {
+        ipresenter.get(Apis.ShopCarPath,ShopCarBean.class);
+    }
+
+    private void addShop(List<Goods> list) {
+        String string="[";
+        if (list.size()==0){
+            list.add(new Goods(Integer.valueOf(pid),1));
+        }else {
+            for(int i=0;i<list.size();i++) {
+                if (Integer.valueOf(pid) == list.get(i).getCommodityId()) {
+                    int count=list.get(i).getCount();
+                    count++;
+                    list.get(i).setCount(count);
+                    break;
+                }
+                else if(i==list.size()-1){
+                    list.add(new Goods(Integer.valueOf(pid),1));
+                    break;
+                }
+            }
+        }
+
+
+        for (Goods goods:list){
+            string+="{\"commodityId\":"+goods.getCommodityId()+",\"count\":"+goods.getCount()+"},";
+        }
+        String substring = string.substring(0, string.length() - 1);
+        substring+="]";
+        Log.i("TAG",substring);
+        Map<String,String> map=new HashMap<>();
+        map.put("data",substring);
+        ipresenter.put(Apis.addShopCarPath,map,AddShopCarBean.class);
 
     }
 
 
     @Override
     public void onSuccessData(Object data) {
-        List<String> list=new ArrayList<>();
-        ShopParticularsBean bean= (ShopParticularsBean) data;
-        ShopParticularsBean.ResultBean result = bean.getResult();
-        String[] split = result.getPicture().split(",");
-        for (int i=0;i<split.length;i++){
-            list.add(split[i]);
+
+        if (data instanceof ShopParticularsBean) {
+            List<String> list = new ArrayList<>();
+            ShopParticularsBean bean = (ShopParticularsBean) data;
+            ShopParticularsBean.ResultBean result = bean.getResult();
+            String[] split = result.getPicture().split(",");
+            for (int i = 0; i < split.length; i++) {
+                list.add(split[i]);
+            }
+            banner.setImages(list);
+            banner.start();
+
+            shopxq_name.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG);
+            shopxq_price.setText("￥：" + bean.getResult().getPrice() + ".00");
+            shopxq_name.setText(bean.getResult().getCommodityName() + "");
+            shopxq_saleNum.setText("已售" + bean.getResult().getSaleNum() + "件");
+            shopxq_xq.setText(bean.getResult().getDescribe());
+            webView.loadDataWithBaseURL(null, bean.getResult().getDetails(), "text/html", "utf-8", null);
+
+        } else if (data instanceof ShopCarBean){
+            ShopCarBean bean= (ShopCarBean) data;
+            if (bean.getStatus().equals("0000")){
+                    List<Goods> list=new ArrayList<>();
+                    List<ShopCarBean.ResultBean> resultBeans=bean.getResult();
+                    for (ShopCarBean.ResultBean resultBean:resultBeans){
+                        list.add(new Goods(resultBean.getCommodityId(),resultBean.getCount()));
+
+                    }
+                    addShop(list);
+                    Toast.makeText(ParticularsActivity.this,bean.getMessage(),Toast.LENGTH_SHORT).show();
+            } else if (data instanceof AddShopCarBean) {
+                AddShopCarBean addShopCarBean = (AddShopCarBean) data;
+                Toast.makeText(ParticularsActivity.this, data + "", Toast.LENGTH_SHORT).show();
+                Log.e("cxy", addShopCarBean.getMessage());
+
+
+            }
+
+
         }
-        banner.setImages(list);
-        banner.start();
-
-        shopxq_name.setPaintFlags(Paint.FAKE_BOLD_TEXT_FLAG);
-        shopxq_price.setText("￥："+bean.getResult().getPrice()+".00");
-        shopxq_name.setText(bean.getResult().getCommodityName()+"");
-        shopxq_saleNum.setText("已售"+bean.getResult().getSaleNum()+"件");
-        shopxq_xq.setText(bean.getResult().getDescribe());
-        webView.loadDataWithBaseURL(null,bean.getResult().getDetails(),"text/html","utf-8",null);
-
 
 
     }
@@ -110,12 +185,15 @@ public class ParticularsActivity extends AppCompatActivity implements Iview {
     @Override
     public void onFailData(Exception e) {
 
+        List<Goods> list=new ArrayList<>();
+        list.add(new Goods(Integer.valueOf(pid),1));
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (webView!=null){
+        if (webView != null) {
             webView.setVisibility(View.GONE);
             webView.removeAllViews();
             webView.destroy();

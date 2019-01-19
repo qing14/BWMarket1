@@ -32,9 +32,25 @@ public class IpresenterImpl implements Ipresenter {
         });
 
     }
+    //post
+    @Override
+    public void post(String urlData, Map<String, String> map, Class clazz) {
+        imodelmpl.postData(urlData, map, clazz, new MyCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                iview.onSuccessData(data);
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                iview.onFailData(e);
+            }
+        });
+    }
+
     //圈子列表
     @Override
-    public void getCircle(String urlData,int page,int count, Class clazz, int i) {
+    public void getCircle(String urlData, int page, int count, Class clazz) {
         imodelmpl.getCircleData(urlData,page,count, clazz, new MyCallBack() {
             @Override
             public void onSuccess(Object data) {
@@ -78,9 +94,25 @@ public class IpresenterImpl implements Ipresenter {
         });
     }
 
+    //put
     @Override
-    public void post(String urlData, Map<String, String> map, Class clazz) {
-        imodelmpl.postData(urlData, map, clazz, new MyCallBack() {
+    public void put(String urlData,Map<String,String> map, Class clazz) {
+        imodelmpl.put(urlData,map, clazz, new MyCallBack() {
+            @Override
+            public void onSuccess(Object data) {
+                iview.onSuccessData(data);
+            }
+
+            @Override
+            public void onFail(Exception e) {
+                iview.onFailData(e);
+            }
+        });
+    }
+
+    @Override
+    public void delete(String urlData, Map<String, String> map, Class clazz) {
+        imodelmpl.delete(urlData, map, clazz, new MyCallBack() {
             @Override
             public void onSuccess(Object data) {
                 iview.onSuccessData(data);

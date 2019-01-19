@@ -2,6 +2,8 @@ package asus.com.bwie.bwmarket.model;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -30,6 +32,32 @@ public class Imodelmpl implements Imodel {
 
 
         });
+    }
+
+    @Override
+    public void postData(String urlData, final Map<String, String> map, final Class clazz, final MyCallBack myCallBack) {
+        OkHttpUtils.getOkHttpUtils().post(urlData, map, new OkHttpUtils.HttpListener() {
+            @Override
+            public void onSuccess(String data) {
+                try {
+                    Object o = new Gson().fromJson(data,clazz);
+                    if(myCallBack != null){
+                        myCallBack.onSuccess(o);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    if(myCallBack != null){
+                        myCallBack.onFail(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+                Log.i("cuowu",error);
+            }
+        });
+
     }
 
     //圈子列表
@@ -92,9 +120,42 @@ public class Imodelmpl implements Imodel {
         OkHttpUtils.getOkHttpUtils().get(urlData, new OkHttpUtils.HttpListener() {
             @Override
             public void onSuccess(String data) {
-                Object o = new Gson().fromJson(data, clazz);
-                if (myCallBack != null) {
-                    myCallBack.onSuccess(o);
+                try {
+                    Object o = new Gson().fromJson(data, clazz);
+                    if(myCallBack != null){
+                        myCallBack.onSuccess(o);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    if(myCallBack != null){
+                        myCallBack.onFail(e);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(String error) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void put(String urlData,Map<String,String> map,  final Class clazz, final MyCallBack myCallBack) {
+        OkHttpUtils.getOkHttpUtils().put(urlData,map, new OkHttpUtils.HttpListener() {
+            @Override
+            public void onSuccess(String data) {
+                try {
+                    Object o = new Gson().fromJson(data, clazz);
+                    if(myCallBack != null){
+                        myCallBack.onSuccess(o);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    if(myCallBack != null){
+                        myCallBack.onFail(e);
+                    }
                 }
             }
 
@@ -106,8 +167,8 @@ public class Imodelmpl implements Imodel {
     }
 
     @Override
-    public void postData(String urlData, final Map<String, String> map, final Class clazz, final MyCallBack myCallBack) {
-        OkHttpUtils.getOkHttpUtils().post(urlData, map, new OkHttpUtils.HttpListener() {
+    public void delete(String urlData, Map<String, String> map, final Class clazz, final MyCallBack myCallBack) {
+        OkHttpUtils.getOkHttpUtils().del(urlData, map, new OkHttpUtils.HttpListener() {
             @Override
             public void onSuccess(String data) {
                 try {

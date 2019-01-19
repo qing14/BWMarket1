@@ -1,7 +1,11 @@
 package asus.com.bwie.bwmarket.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -17,6 +21,7 @@ import asus.com.bwie.bwmarket.callback.MyCallBack;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -57,7 +62,32 @@ public class OkHttpUtils {
                 .connectTimeout(10,TimeUnit.SECONDS)
                 .writeTimeout(10,TimeUnit.SECONDS)
                 .readTimeout(10,TimeUnit.SECONDS)
-                .addInterceptor(interceptor)
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request original = chain.request();
+                        SharedPreferences sharedPreferences= BaseApplication.getApplication().getSharedPreferences("spDemo",Context.MODE_PRIVATE);
+                        String userId = sharedPreferences.getString("userId", "");
+                        String sessionId = sharedPreferences.getString("sessionId", "");
+
+                        Request.Builder rerequestBuilder=original.newBuilder();
+
+                        rerequestBuilder.method(original.method(),original.body());
+
+                        if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(sessionId)){
+                            rerequestBuilder.addHeader("userId",userId);
+                            rerequestBuilder.addHeader("sessionId",sessionId);
+                            Log.d("user",userId);
+                            Log.d("seeeionId",sessionId);
+
+                        }
+                        Request request = rerequestBuilder.build();
+
+
+
+                        return chain.proceed(request);
+                    }
+                })
                 .retryOnConnectionFailure(true)
                 .build();
 
@@ -184,11 +214,32 @@ public class OkHttpUtils {
     public OkHttpUtils post(String url,Map<String,String> map,HttpListener listener){
         if (map==null){
             map=new HashMap<>();
-
         }
         baseApis.post(url,map)
                 .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(getObserver(listener));
+        return okHttpUtils;
+    }
+    /**
+     * put
+     */
+    public OkHttpUtils put(String url,Map<String,String> map,HttpListener listener){
+
+        baseApis.put(url,map)
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(getObserver(listener));
+        return okHttpUtils;
+    }
+    /**
+     * del
+     */
+    public OkHttpUtils del(String url,Map<String,String> map,HttpListener listener){
+
+        baseApis.del(url,map)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .subscribe(getObserver(listener));
         return okHttpUtils;
     }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import asus.com.bwie.bwmarket.Apis;
 import asus.com.bwie.bwmarket.R;
 import asus.com.bwie.bwmarket.bean.LoginBean;
 import asus.com.bwie.bwmarket.presenter.IpresenterImpl;
+import asus.com.bwie.bwmarket.util.YZUtils;
 import asus.com.bwie.bwmarket.view.Iview;
 
 public class MainActivity extends AppCompatActivity implements Iview {
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements Iview {
     private IpresenterImpl ipresenter;
     private String phonenums;
     private String passwords;
+    private LoginBean loginBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,54 +46,54 @@ public class MainActivity extends AppCompatActivity implements Iview {
 
 
         initView();
+        //去注册
         go_zc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,RegisterActivity.class);
+                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
-
+        //密码的显示和隐藏
+        findViewById(R.id.login_seepassword).setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                }
+                return true;
+            }
+        });
+        //登录
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 phonenums = phonenum.getText().toString();
                 passwords = password.getText().toString();
-                if (jzpassword.isChecked()){
-                    editor.putBoolean("check_jz",true);
+                if (jzpassword.isChecked()) {
+                    editor.putBoolean("check_jz", true);
                     editor.putString("phonenum", phonenums);
                     editor.putString("password", passwords);
                     editor.commit();
-                }else {
+                } else {
                     editor.clear();
                     editor.commit();
                     jzpassword.setChecked(false);
                 }
-
                 getPath();
+            }
+        });
 
-            }
-        });
-        findViewById(R.id.login_seepassword).setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() ==MotionEvent.ACTION_DOWN){
-                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    }else if (event.getAction()==MotionEvent.ACTION_UP){
-                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    }
-                return true;
-            }
-        });
 
     }
 
     private void getPath() {
-        Map<String,String> map=new HashMap<>();
-        map.put("phone",phonenums);
-        map.put("pwd",passwords);
-        ipresenter.startRequest(Apis.loginPath,map,LoginBean.class);
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", phonenums);
+        map.put("pwd", passwords);
+        ipresenter.startRequest(Apis.loginPath, map, LoginBean.class);
 
     }
 
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements Iview {
         sharedPreferences = getSharedPreferences("Data", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         boolean check_jz = sharedPreferences.getBoolean("check_jz", false);
-        if (check_jz){
+        if (check_jz) {
             String phonenums = sharedPreferences.getString("phonenum", null);
             String passwords = sharedPreferences.getString("password", null);
             phonenum.setText(phonenums);
@@ -112,29 +115,25 @@ public class MainActivity extends AppCompatActivity implements Iview {
             jzpassword.setChecked(true);
         }
     }
-
+    //  成功
     @Override
     public void onSuccessData(Object data) {
-    LoginBean loginBean= (LoginBean) data;
+        if (data instanceof LoginBean) {
+            loginBean = (LoginBean) data;
+            if (loginBean.getMessage().equals("登录成功")){
+                Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                SharedPreferences sharedPreferences = getSharedPreferences("spDemo", MODE_PRIVATE);
+                sharedPreferences.edit().putString("userId", loginBean.getResult().getUserId() + "").putString("sessionId", loginBean.getResult().getSessionId()).commit();
+                startActivity(intent);
+            }else {
+                Toast.makeText(MainActivity.this,loginBean.getMessage()+"",Toast.LENGTH_LONG).show();
+            }
 
-    if (phonenum==null||password==null){
-
-        Toast.makeText(MainActivity.this,loginBean.getMessage(),Toast.LENGTH_SHORT).show();
-    }else {
-        if (loginBean.getStatus().equals("0000")) {
-            Intent intent = new Intent(MainActivity.this, ShowActivity.class);
-            intent.putExtra("phonename", phonenum.getText().toString());
-            startActivity(intent);
-        }else if(loginBean.getStatus().equals("1001")){
-            Toast.makeText(MainActivity.this,loginBean.getMessage(),Toast.LENGTH_SHORT).show();
         }
-    }
-
-
     }
 
     @Override
     public void onFailData(Exception e) {
         e.printStackTrace();
-        }
+    }
 }

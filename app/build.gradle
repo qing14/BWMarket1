@@ -63,5 +63,9 @@ dependencies {
     //Banner
     implementation 'com.youth.banner:banner:1.4.10'
 
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+    implementation 'org.greenrobot:eventbus:3.0.0'
+
+    implementation 'liji.library.dev:citypickerview:1.1.0'
 
 }

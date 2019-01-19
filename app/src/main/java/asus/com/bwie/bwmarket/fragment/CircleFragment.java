@@ -1,5 +1,6 @@
 package asus.com.bwie.bwmarket.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,8 +9,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -18,7 +21,9 @@ import java.util.Map;
 
 import asus.com.bwie.bwmarket.Apis;
 import asus.com.bwie.bwmarket.R;
+import asus.com.bwie.bwmarket.activity.MainActivity;
 import asus.com.bwie.bwmarket.adapter.CircleListAdapter;
+import asus.com.bwie.bwmarket.bean.CircleDZBean;
 import asus.com.bwie.bwmarket.bean.CircleListBean;
 import asus.com.bwie.bwmarket.presenter.IpresenterImpl;
 import asus.com.bwie.bwmarket.util.SpaceItemDecoration;
@@ -33,6 +38,8 @@ public class CircleFragment extends Fragment implements Iview {
     private ImageView circle_dianzan_img;
     int count=5;
 
+    private int isClick;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,11 +47,9 @@ public class CircleFragment extends Fragment implements Iview {
         circle_recycle = view.findViewById(R.id.circle_recycle);
         ipresenter = new IpresenterImpl(this);
         circle_dianzan_img = view.findViewById(R.id.circle_dianzan_img);
-        circle_dianzan_num = view.findViewById(R.id.circle_dianzan_num);
         circleListAdapter = new CircleListAdapter(getActivity());
         circle_recycle.addItemDecoration(new SpaceItemDecoration(10));
         circle_recycle.setAdapter(circleListAdapter);
-
         circle_recycle.setLoadingMoreEnabled(true);
         circle_recycle.setPullRefreshEnabled(true);
         circle_recycle.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -61,14 +66,40 @@ public class CircleFragment extends Fragment implements Iview {
         });
         LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
         circle_recycle.setLayoutManager(linearLayoutManager);
+
         mPage=1;
         requestData();
+        circleListAdapter.setOnDZClickListenter(new CircleListAdapter.DZClickListenter() {
+            @Override
+            public void onClick(int WhetherGreat, int position, int id) {
+                isClick=position;
+                    if (WhetherGreat==1){
+                        CancelLike(id);
+                    }else {
+                        getLike(id);
+                    }
+            }
+        });
+
 
         return view;
     }
+    //取消
+    private void CancelLike(int id) {
+        Map<String,String> map=new HashMap<>();
+        map.put("circleId",id+"");
+        ipresenter.delete(Apis.UnCircleDZPath,map,CircleDZBean.class);
+
+    }
+    //点赞
+    private void getLike(int id) {
+        Map<String,String> map=new HashMap<>();
+        map.put("circleId",id+"");
+        ipresenter.startRequest(Apis.CricleDZPath,map,CircleDZBean.class);
+    }
 
     private void requestData() {
-        ipresenter.getCircle(Apis.circleListPath,mPage,count,CircleListBean.class, 0);
+        ipresenter.getCircle(Apis.circleListPath,mPage,count,CircleListBean.class);
     }
 
     @Override
@@ -77,10 +108,26 @@ public class CircleFragment extends Fragment implements Iview {
             CircleListBean circleListBean= (CircleListBean) data;
             circleListAdapter.setList(circleListBean.getResult());
 
+            mPage++;
+            circle_recycle.loadMoreComplete();
+            circle_recycle.refreshComplete();
+
+        } else if(data instanceof CircleDZBean){
+            CircleDZBean circleDZBean= (CircleDZBean) data;
+            if(circleDZBean.getMessage().equals("请先登陆")){
+                Toast.makeText(getContext(), "请先登录", Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(getContext(),MainActivity.class);
+                startActivity(intent);
+            }else if(circleDZBean.getMessage().equals("点赞成功")){
+                Toast.makeText(getContext(), circleDZBean.getMessage(), Toast.LENGTH_SHORT).show();
+                circleListAdapter.Dianzan(isClick);
+                circleListAdapter.notifyDataSetChanged();
+            }else {
+                circleListAdapter.UnDaianzan(isClick);
+                Toast.makeText(getContext(), circleDZBean.getMessage(), Toast.LENGTH_SHORT).show();
+                circleListAdapter.notifyDataSetChanged();
+            }
         }
-        mPage++;
-        circle_recycle.loadMoreComplete();
-        circle_recycle.refreshComplete();
 
     }
 

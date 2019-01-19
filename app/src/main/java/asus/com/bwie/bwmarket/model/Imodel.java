@@ -17,4 +17,8 @@ public interface Imodel {
     void get(String urlData,Class clazz,MyCallBack myCallBack);
     //post
     void postData(String urlData, Map<String,String> map,Class clazz,MyCallBack myCallBack);
+    //put
+    void put(String urlData,Map<String,String> map,Class clazz,MyCallBack myCallBack);
+    //delete
+    void delete(String urlData,Map<String,String> map,Class clazz,MyCallBack myCallBack);
 }
